@@ -1,8 +1,10 @@
-package it.vamxneedev.stellarxlib.api;
+package it.vamxneedev.stellarxlib.database;
 
 import it.vamxneedev.stellarxlib.enums.DatabaseType;
+import it.vamxneedev.stellarxlib.utilities.database.Query;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 
 public interface Database {
 
@@ -27,4 +29,76 @@ public interface Database {
     Boolean isConnected();
     void closeConnection();
 
+    /**
+     * <p>Send query through connection with synchronization with main thread.
+     * It will affect TPS depends of connection quality.</p>
+     */
+    Boolean updateSync(Query query);
+    /**
+     * <p>Send query through connection asynchronously in background.
+     * It will not affect TPS, but it will work asynchronously.</p>
+     *
+     * <p>Also, database will be updated in delay and data will not be synchronous.
+     * It will be unable to get data from database instantly after update in another line of code.</p>
+     */
+    void updateAsync(Query query);
+    /**
+     * <p>Data from ResultSet can be get using ResultSetManager from this plugin.</p>
+     */
+    ResultSet getResult(Query query);
+
+    /**
+     * <p>Keys are used to find correct row.</p>
+     * <p>{@code setObjectSync("SQLTable", "player_name", "Esingoteraly", "player_kills", 3);}</p>
+     */
+    void setObjectSync(String table, String keyColumn, Object keyValue, String objectColumn, Object objectValue, Boolean hasTablePrimaryKey);
+    /**
+     * <p>Keys are used to find correct row.</p>
+     * <p>{@code setObjectAsync("SQLTable", "player_name", "Esingoteraly", "player_kills", 3);}</p>
+     */
+    void setObjectAsync(String table, String keyColumn, Object keyValue, String objectColumn, Object objectValue, Boolean hasTablePrimaryKey);
+
+    /**
+     * <p>Keys are used to find correct row.</p>
+     * <p>{@code removeObjectAsync("SQLTable", "player_name", "Esingoteraly", "player_kills");}</p>
+     */
+    void removeObjectAsync(String table, String keyColumn, Object keyValue, String objectColumn);
+    /**
+     * <p>Keys are used to find correct row.</p>
+     * <p>{@code removeObjectSync("SQLTable", "player_name", "Esingoteraly", "player_kills");}</p>
+     */
+    void removeObjectSync(String table, String keyColumn, Object keyValue, String objectColumn);
+
+    /**
+     * <p>Keys are used to find correct row.</p>
+     * <p>{@code getRow("Students", "student_name", "Jonny");}</p>
+     */
+    ResultSet getRow(String table, String keyColumn, String keyValue);
+    /**
+     * <p>Keys are used to find correct row.</p>
+     * <p>{@code getRow("Students", "student_name", "Jonny", 3);}</p>
+     */
+    ResultSet getRows(String table, String keyColumn, String keyValue, int limit);
+
+    /**
+     * <p>Keys are used to find correct row.</p>
+     * <p>{@code deleteRow("Students", "student_course", "math");}</p>
+     */
+    void deleteRowSync(String table, String keyColumn, String keyValue);
+    /**
+     * <p>Keys are used to find correct row.</p>
+     * <p>{@code deleteRow("Students", "student_course", "math");}</p>
+     */
+    void deleteRowAsync(String table, String keyColumn, String keyValue);
+
+    /**
+     * <p>Keys are used to find correct row.</p>
+     * <p>{@code deleteRow("Students", "student_course", "math", 3);}</p>
+     */
+    void deleteRowsSync(String table, String keyColumn, String keyValue, int limit);
+    /**
+     * <p>Keys are used to find correct row.</p>
+     * <p>{@code deleteRow("Students", "student_course", "math", 3);}</p>
+     */
+    void deleteRowsAsync(String table, String keyColumn, String keyValue, int limit);
 }

@@ -1,4 +1,4 @@
-package it.vamxneedev.stellarxlib.database;
+package it.vamxneedev.stellarxlib.utilities.database;
 
 public class Query {
 

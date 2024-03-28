@@ -1,4 +1,4 @@
-package it.vamxneedev.stellarxlib.utilities;
+package it.vamxneedev.stellarxlib.utilities.database;
 
 import it.vamxneedev.stellarxlib.enums.DatabaseType;
 import org.apache.commons.lang3.tuple.Pair;
@@ -86,7 +86,7 @@ public class QueryUtils {
         return query;
     }
 
-    public static String constructQueryRowsRemove(String table, String column, Object value, Object limit, DatabaseType databaseType){
+    public static String constructQueryRowsRemove(String table, String column, Object value, Object limit){
         String query;
         if (value instanceof Number) {
             query = "DELETE FROM `" + table + "` "+
@@ -101,7 +101,7 @@ public class QueryUtils {
         return query;
     }
 
-    public static String constructQueryRowsRemove(String table, Pair pair, Object limit, DatabaseType databaseType){
+    public static String constructQueryRowsRemove(String table, Pair pair, Object limit){
         String query;
         String column = (String)pair.getLeft();
         Object value = pair.getRight();
@@ -180,7 +180,7 @@ public class QueryUtils {
         } else if (!(keyValue instanceof Number)) {
             keyValueTrans = "'" + keyValueTrans + "'";
         }
-        if (databaseType == DatabaseType.MYSQL){
+        if (databaseType == DatabaseType.MYSQL || databaseType == DatabaseType.MARIADB){
             String query;
             query = "INSERT INTO `"+table+"` "
                     + "(`"+keyColumn+"`, `"+setColumn+"`) "
@@ -191,6 +191,21 @@ public class QueryUtils {
                         + "`"+setColumn+"` = "+setValueTrans+" ";
             }
             queryList.add(query);
+        } else if (databaseType == DatabaseType.H2) {
+            String begining = "INSERT";
+            if (hasTableUniqueKey) {
+                begining = "INSERT OR IGNORE";
+            }
+            String query1 = begining+" INTO "+table+" "
+                    + "("+keyColumn+", "+setColumn+") "
+                    + "VALUES ("+keyValueTrans+", "+setValueTrans+")";
+            if (hasTableUniqueKey) {
+                String query2 = "MERGE INTO "+table+" ( "+keyColumn+", "+setColumn+") "
+                        + "KEY ("+keyColumn+") "
+                        + "VALUES ("+keyValueTrans+", "+setValueTrans+")";
+                queryList.add(query2);
+            }
+            queryList.add(query1);
         } else {
             String begining = "INSERT";
             if (hasTableUniqueKey) {
@@ -231,7 +246,7 @@ public class QueryUtils {
         } else if (!(keyValue instanceof Number)) {
             keyValueTrans = "'" + keyValueTrans + "'";
         }
-        if (databaseType == DatabaseType.MYSQL){
+        if (databaseType == DatabaseType.MYSQL || databaseType == DatabaseType.MARIADB){
             String query;
             query = "INSERT INTO `"+table+"` "
                     + "(`"+keyColumn+"`, `"+setColumn+"`) "
@@ -242,6 +257,22 @@ public class QueryUtils {
                         + "`"+setColumn+"` = coalesce("+setColumn+" + "+setValue+", "+setValue+") ";
             }
             queryList.add(query);
+        } else if (databaseType == DatabaseType.H2) {
+            if (hasTableUniqueKey) {
+                String query1, query2;
+                query1 = "MERGE INTO "+table+" ("+keyColumn+", "+setColumn+") "
+                        + "VALUES ("+keyValueTrans+", 0)";
+                query2 = "UPDATE "+ table+" "
+                        + "SET "+setColumn+" = coalesce("+setColumn+" + "+setValue+", "+setValue+") "
+                        + "WHERE "+keyColumn+" = "+keyValueTrans+" ";
+                queryList.add(query1);
+                queryList.add(query2);
+            } else {
+                String query1;
+                query1 = "INSERT INTO "+table+" ("+keyColumn+", "+setColumn+") "
+                        + "VALUES ("+keyValueTrans+", "+setValue+")";
+                queryList.add(query1);
+            }
         } else {
             if (hasTableUniqueKey) {
                 String query1, query2;
@@ -276,7 +307,7 @@ public class QueryUtils {
         } else if (!(keyValue instanceof Number)) {
             keyValueTrans = "'" + keyValueTrans + "'";
         }
-        if (databaseType == DatabaseType.MYSQL){
+        if (databaseType == DatabaseType.MYSQL || databaseType == DatabaseType.MARIADB){
             String query;
             query = "INSERT INTO `"+table+"` "
                     + "(`"+keyColumn+"`, `"+setColumn+"`) "
@@ -287,6 +318,23 @@ public class QueryUtils {
                         + "`"+setColumn+"` = coalesce("+setColumn+" - "+setValue+", "+setValue+") ";
             }
             queryList.add(query);
+
+        } else if (databaseType == DatabaseType.H2) {
+            if (hasTableUniqueKey) {
+                String query1, query2;
+                query1 = "MERGE INTO "+table+" ("+keyColumn+", "+setColumn+") "
+                        + "VALUES ("+keyValueTrans+", 0)";
+                query2 = "UPDATE "+ table+" "
+                        + "SET "+setColumn+" = coalesce("+setColumn+" - "+setValue+", "+setValue+") "
+                        + "WHERE "+keyColumn+" = "+keyValueTrans+" ";
+                queryList.add(query1);
+                queryList.add(query2);
+            } else {
+                String query1;
+                query1 = "INSERT INTO "+table+" ("+keyColumn+", "+setColumn+") "
+                        + "VALUES ("+keyValueTrans+", "+setValue+")";
+                queryList.add(query1);
+            }
         } else {
             if (hasTableUniqueKey) {
                 String query1, query2;
@@ -310,7 +358,7 @@ public class QueryUtils {
     }
 
     /**
-     * <p>If databse is not MySQL then REMEMBER to put primary table name on first place</p>
+     * <p>If database is not MySQL then REMEMBER to put primary table name on first place</p>
      */
     public static List<String> constructQueryMultipleValuesSet(String table, List<Pair<String, Object>> pairs, Boolean hasTableUniqueKey, DatabaseType databaseType){
         List<String> queryList = new ArrayList<>();
@@ -340,7 +388,7 @@ public class QueryUtils {
         }
         flatColumns = flatColumns + ")";
         flatValues = flatValues + ")";
-        if (databaseType == DatabaseType.MYSQL){
+        if (databaseType == DatabaseType.MYSQL || databaseType == DatabaseType.MARIADB){
             String query;
             query = "INSERT INTO `"+table+"` "
                     + flatColumns+" "
@@ -351,6 +399,27 @@ public class QueryUtils {
                         + flatColumnsAndValues;
             }
             queryList.add(query);
+        } else if (databaseType == DatabaseType.H2) {
+            String begining = "INSERT";
+            if (hasTableUniqueKey) {
+                begining = "MERGE INTO";
+            }
+            String query1 = begining+" "+table+" "
+                    + flatColumns
+                    + " VALUES "+flatValues;
+            if (hasTableUniqueKey) {
+                Pair<String, Object> keyPair = pairs.get(0);
+                Object keyValue = keyPair.getRight();
+                String keyValueTrans = keyValue != null ? keyValue.toString() : "NULL";
+                if (!(keyValue instanceof Number)) {
+                    keyValueTrans = "'" + keyValueTrans + "'";
+                }
+                String query2 = "UPDATE "+table+" "
+                        + "SET "+flatColumnsAndValues+" "
+                        + "WHERE "+keyPair.getLeft()+" = "+keyValueTrans;
+                queryList.add(query2);
+            }
+            queryList.add(query1);
         } else {
             String begining = "INSERT";
             if (hasTableUniqueKey) {
@@ -373,9 +442,9 @@ public class QueryUtils {
                 queryList.add(query2);
             }
             queryList.add(query1);
-
         }
 
         return queryList;
     }
+
 }

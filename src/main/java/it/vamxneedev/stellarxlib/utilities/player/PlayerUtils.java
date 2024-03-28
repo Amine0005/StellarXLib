@@ -8,7 +8,6 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -17,76 +16,76 @@ public class PlayerUtils {
     private final Plugin instance;
     public PlayerUtils(Plugin instance) { this.instance = instance; }
 
-    public static @NotNull Location getPlayerLocation(@NotNull Player player) {
+    public static Location getPlayerLocation(Player player) {
         return player.getLocation();
     }
-    public static String getPlayerLocationString(@NotNull Player player) {
+    public static String getPlayerLocationString(Player player) {
         return String.format("X: %.2f, Y: %.2f, Z: %.2f", player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
     }
 
-    public static void addExperiencePoints(@NotNull Player player, int amount) {
+    public static void addExperiencePoints(Player player, int amount) {
         player.giveExp(amount);
     }
-    public static void removeExperiencePoints(@NotNull Player player, int amount) {
+    public static void removeExperiencePoints(Player player, int amount) {
         player.giveExp(-amount);
     }
-    public static int getPlayerExperienceLevel(@NotNull Player player) {
+    public static int getPlayerExperienceLevel(Player player) {
         return player.getLevel();
     }
-    public static void setPlayerExperienceLevel(@NotNull Player player, int level) {
+    public static void setPlayerExperienceLevel(Player player, int level) {
         player.setLevel(level);
     }
 
-    public static void increasePlayerHealth(@NotNull Player player, double amount) {
+    public static void increasePlayerHealth(Player player, double amount) {
         double currentHealth = player.getHealth();
         player.setHealth(currentHealth + amount);
     }
-    public static void decreasePlayerHealth(@NotNull Player player, double amount) {
+    public static void decreasePlayerHealth(Player player, double amount) {
         double currentHealth = player.getHealth();
         player.setHealth(currentHealth - amount);
     }
 
-    public static void increasePlayerFoodLevel(@NotNull Player player, int amount) {
+    public static void increasePlayerFoodLevel(Player player, int amount) {
         int currentFoodLevel = player.getFoodLevel();
         player.setFoodLevel(currentFoodLevel + amount);
     }
-    public static void decreasePlayerFoodLevel(@NotNull Player player, int amount) {
+    public static void decreasePlayerFoodLevel(Player player, int amount) {
         int currentFoodLevel = player.getFoodLevel();
         player.setFoodLevel(currentFoodLevel - amount);
     }
 
-    public static Location getPlayerSpawnLocation(@NotNull Player player) {
+    public static Location getPlayerSpawnLocation(Player player) {
         return player.getBedSpawnLocation() != null ? player.getBedSpawnLocation() : player.getWorld().getSpawnLocation();
     }
-    public static void setPlayerSpawnLocation(@NotNull Player player, Location location) {
+    public static void setPlayerSpawnLocation(Player player, Location location) {
         player.setBedSpawnLocation(location, true);
     }
 
-    public static boolean isPlayerOnline(@NotNull Player player) {
+    public static boolean isPlayerOnline(Player player) {
         return player.isOnline();
     }
-    public static boolean isPlayerDead(@NotNull Player player) {
+    public static boolean isPlayerDead(Player player) {
         return player.isDead();
     }
-    public static boolean isPlayerFlying(@NotNull Player player) {
+    public static boolean isPlayerFlying(Player player) {
         return player.isFlying();
     }
 
-    public static @NotNull String getPlayerPermissionLevel(@NotNull Player player) {
+    public static String getPlayerPermissionLevel(Player player) {
         return player.isOp() ? "op" : "default";
     }
 
-    public static @NotNull GameMode getGameMode(@NotNull Player player) {
+    public static GameMode getGameMode(Player player) {
         return player.getGameMode();
     }
-    public static void setGameMode(@NotNull Player player, GameMode gameMode) {
+    public static void setGameMode(Player player, GameMode gameMode) {
         player.setGameMode(gameMode);
     }
 
-    public static void giveItem(@NotNull Player player, ItemStack itemStack) {
+    public static void giveItem(Player player, ItemStack itemStack) {
         player.getInventory().addItem(itemStack);
     }
-    public static void removeItem(@NotNull Player player, ItemStack itemStack) {
+    public static void removeItem(Player player, ItemStack itemStack) {
         player.getInventory().removeItem(itemStack);
     }
     public static void giveItemAll(ItemStack itemStack) {

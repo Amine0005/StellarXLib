@@ -1,2 +1,9 @@
-package it.vamxneedev.stellarxlib.enums;public class DatabaseType {
+package it.vamxneedev.stellarxlib.enums;
+
+public enum DatabaseType {
+    MYSQL,
+    MARIADB,
+    SQLITE,
+    H2,
+    POSTGRESQL
 }
