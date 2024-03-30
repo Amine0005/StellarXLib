@@ -6,6 +6,10 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -72,5 +76,24 @@ public class Utils {
     }
     public static void executePlayerCmd(Player player, String command) {
         player.performCommand(command);
+    }
+
+    public void checkPath(String x) {
+        Path filePath = Paths.get(x);
+        Path parentPath = filePath.getParent();
+        if(parentPath != null) {
+            try {
+                Files.createDirectories(parentPath);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        if(!Files.exists(filePath)) {
+            try {
+                Files.createFile(filePath);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }
