@@ -78,7 +78,7 @@ public class Utils {
         player.performCommand(command);
     }
 
-    public void checkPath(String x) {
+    public static void checkPath(String x) {
         Path filePath = Paths.get(x);
         Path parentPath = filePath.getParent();
         if(parentPath != null) {
