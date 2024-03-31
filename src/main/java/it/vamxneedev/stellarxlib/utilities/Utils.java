@@ -96,4 +96,35 @@ public class Utils {
             }
         }
     }
+
+    public static int versionToNumber() {
+        String version = Bukkit.getVersion();
+        if (version.contains("1.8"))
+            return 18;
+        if (version.contains("1.9"))
+            return 19;
+        if (version.contains("1.10"))
+            return 110;
+        if (version.contains("1.11"))
+            return 111;
+        if (version.contains("1.12"))
+            return 112;
+        if (version.contains("1.13"))
+            return 113;
+        if (version.contains("1.14"))
+            return 114;
+        if (version.contains("1.15"))
+            return 115;
+        if (version.contains("1.16"))
+            return 116;
+        if (version.contains("1.17"))
+            return 117;
+        if (version.contains("1.18"))
+            return 118;
+        if (version.contains("1.19"))
+            return 119;
+        if (version.contains("1.20"))
+            return 120;
+        return 500;
+    }
 }

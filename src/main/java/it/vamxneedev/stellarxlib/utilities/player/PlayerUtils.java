@@ -1,6 +1,7 @@
 package it.vamxneedev.stellarxlib.utilities.player;
 
 import com.cryptomorin.xseries.XSound;
+import it.vamxneedev.stellarxlib.utilities.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -113,5 +114,14 @@ public class PlayerUtils {
         } catch (NullPointerException exception) {
             exception.printStackTrace();
         }
+    }
+
+    @SuppressWarnings("deprecated")
+    public ItemStack getMainHandItem(Player p) {
+        if (Utils.versionToNumber() == 18)
+            return p.getItemInHand();
+        if (Utils.versionToNumber() > 18)
+            return p.getInventory().getItemInMainHand();
+        return p.getItemInHand();
     }
 }
