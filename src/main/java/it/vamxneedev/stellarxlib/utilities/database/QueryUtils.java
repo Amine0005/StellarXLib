@@ -447,4 +447,11 @@ public class QueryUtils {
         return queryList;
     }
 
+    public static List<Query> convertStringToQuery(List<String> qS) {
+        List<Query> listOfQueries = new ArrayList<>();
+        for(String query : qS) {
+            listOfQueries.add(new Query(query));
+        }
+        return listOfQueries;
+    }
 }

@@ -180,14 +180,6 @@ public class H2Database extends DatabaseScheduler implements Database {
     }
 
     @Override
-    public List<Query> convertStringToQuery(List<String> qS) {
-        List<Query> listOfQueries = new ArrayList<>();
-        for(String query : qS) {
-            listOfQueries.add(new Query(query));
-        }
-        return listOfQueries;
-    }
-    @Override
     public void performMultipleQueriesSync(List<Query> listOfQueries) {
         for(Query q : listOfQueries) {
             updateSync(q);

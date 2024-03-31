@@ -48,8 +48,6 @@ public interface Database {
      */
     ResultSet getResult(Query query);
 
-    List<Query> convertStringToQuery(List<String> qS);
-
     void performMultipleQueriesSync(List<Query> listOfQueries);
 
     void performMultipleQueriesAsync(List<Query> listOfQueries);
