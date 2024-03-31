@@ -117,7 +117,7 @@ public class PlayerUtils {
     }
 
     @SuppressWarnings("deprecated")
-    public ItemStack getMainHandItem(Player p) {
+    public static ItemStack getMainHandItem(Player p) {
         if (Utils.versionToNumber() == 18)
             return p.getItemInHand();
         if (Utils.versionToNumber() > 18)
