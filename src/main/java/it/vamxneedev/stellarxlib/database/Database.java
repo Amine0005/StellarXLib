@@ -48,8 +48,14 @@ public interface Database {
      */
     ResultSet getResult(Query query);
 
+    /**
+    *    <p>Necessary to perform multiple queries in sync way</p>
+    */
     void performMultipleQueriesSync(List<Query> listOfQueries);
 
+    /**
+     *    <p>Necessary to perform multiple queries in async way</p>
+     */
     void performMultipleQueriesAsync(List<Query> listOfQueries);
 
     /**

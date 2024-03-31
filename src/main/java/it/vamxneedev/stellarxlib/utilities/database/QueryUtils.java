@@ -447,6 +447,7 @@ public class QueryUtils {
         return queryList;
     }
 
+    // Need to convert String query to Query Object
     public static List<Query> convertStringToQuery(List<String> qS) {
         List<Query> listOfQueries = new ArrayList<>();
         for(String query : qS) {
