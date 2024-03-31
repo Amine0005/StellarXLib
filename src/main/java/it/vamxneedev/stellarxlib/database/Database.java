@@ -5,6 +5,7 @@ import it.vamxneedev.stellarxlib.utilities.database.Query;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.util.List;
 
 public interface Database {
 
@@ -46,6 +47,12 @@ public interface Database {
      * <p>Data from ResultSet can be get using ResultSetManager from this plugin.</p>
      */
     ResultSet getResult(Query query);
+
+    List<Query> convertStringToQuery(List<String> qS);
+
+    void performMultipleQueriesSync(List<Query> listOfQueries);
+
+    void performMultipleQueriesAsync(List<Query> listOfQueries);
 
     /**
      * <p>Keys are used to find correct row.</p>

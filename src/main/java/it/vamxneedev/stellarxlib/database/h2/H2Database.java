@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public class H2Database extends DatabaseScheduler implements Database {
@@ -176,6 +177,28 @@ public class H2Database extends DatabaseScheduler implements Database {
             throw new RuntimeException(e);
         }
         return set;
+    }
+
+    @Override
+    public List<Query> convertStringToQuery(List<String> qS) {
+        List<Query> listOfQueries = new ArrayList<>();
+        for(String query : qS) {
+            listOfQueries.add(new Query(query));
+        }
+        return listOfQueries;
+    }
+    @Override
+    public void performMultipleQueriesSync(List<Query> listOfQueries) {
+        for(Query q : listOfQueries) {
+            updateSync(q);
+        }
+    }
+
+    @Override
+    public void performMultipleQueriesAsync(List<Query> listOfQueries) {
+        for(Query q : listOfQueries) {
+            updateAsync(q);
+        }
     }
 
     @Override

@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MySqlDatabase extends DatabaseScheduler implements Database {
@@ -174,6 +175,28 @@ public class MySqlDatabase extends DatabaseScheduler implements Database {
             throw new RuntimeException(e);
         }
         return set;
+    }
+
+    @Override
+    public List<Query> convertStringToQuery(List<String> qS) {
+        List<Query> listOfQueries = new ArrayList<>();
+        for(String query : qS) {
+            listOfQueries.add(new Query(query));
+        }
+        return listOfQueries;
+    }
+    @Override
+    public void performMultipleQueriesSync(List<Query> listOfQueries) {
+        for(Query q : listOfQueries) {
+            updateSync(q);
+        }
+    }
+
+    @Override
+    public void performMultipleQueriesAsync(List<Query> listOfQueries) {
+        for(Query q : listOfQueries) {
+            updateAsync(q);
+        }
     }
 
     @Override
