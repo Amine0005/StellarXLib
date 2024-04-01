@@ -165,18 +165,13 @@ public class SqLiteDatabase extends DatabaseScheduler implements Database {
 
         ResultSet set = null;
         try {
-            Statement statement = sqLiteConnection.getConnection().createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+            Statement statement = this.sqLiteConnection.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             set = statement.executeQuery(query.getQuery());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            Bukkit.getConsoleSender().sendMessage("[StellarXLib] SqLite get data from query error: " + e.getErrorCode());
+        } catch (SQLException var5) {
+            var5.printStackTrace();
+            Bukkit.getConsoleSender().sendMessage("[StellarXLib] SqLite get data from query error: " + var5.getErrorCode());
         }
-        try {
-            if(set != null)
-                set.beforeFirst();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+
         return set;
     }
 
