@@ -165,7 +165,7 @@ public class SqLiteDatabase extends DatabaseScheduler implements Database {
 
         ResultSet set = null;
         try {
-            Statement statement = this.sqLiteConnection.getConnection().createStatement();
+            Statement statement = this.sqLiteConnection.getConnection().createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             set = statement.executeQuery(query.getQuery());
 
         } catch (SQLException var5) {
