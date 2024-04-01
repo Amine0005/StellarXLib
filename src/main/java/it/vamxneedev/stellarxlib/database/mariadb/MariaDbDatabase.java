@@ -164,7 +164,7 @@ public class MariaDbDatabase extends DatabaseScheduler implements Database {
 
         ResultSet set = null;
         try {
-            Statement statement = mariaDbConnection.getConnection().createStatement();
+            Statement statement = mariaDbConnection.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             set = statement.executeQuery(query.getQuery());
         } catch (SQLException e) {
             e.printStackTrace();

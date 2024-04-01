@@ -162,7 +162,7 @@ public class MySqlDatabase extends DatabaseScheduler implements Database {
 
         ResultSet set = null;
         try {
-            Statement statement = mySqlConnection.getConnection().createStatement();
+            Statement statement = mySqlConnection.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             set = statement.executeQuery(query.getQuery());
         } catch (SQLException e) {
             e.printStackTrace();

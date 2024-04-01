@@ -127,4 +127,12 @@ public class Utils {
             return 120;
         return 500;
     }
+
+    public static double calculateElo(double eloDifference, int k, double score) {
+        double eloDifferenceRatio = eloDifference / 400;
+        double exponentialValue = Math.pow(10, eloDifferenceRatio) + 1;
+        double expected = 1 / exponentialValue;
+
+        return (k * (score - expected));
+    }
 }

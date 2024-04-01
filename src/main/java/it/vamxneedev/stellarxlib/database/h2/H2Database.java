@@ -164,7 +164,7 @@ public class H2Database extends DatabaseScheduler implements Database {
 
         ResultSet set = null;
         try {
-            Statement statement = h2Connection.getConnection().createStatement();
+            Statement statement = h2Connection.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             set = statement.executeQuery(query.getQuery());
         } catch (SQLException e) {
             e.printStackTrace();
