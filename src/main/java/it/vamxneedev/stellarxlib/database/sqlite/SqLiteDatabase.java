@@ -167,6 +167,7 @@ public class SqLiteDatabase extends DatabaseScheduler implements Database {
         try {
             Statement statement = this.sqLiteConnection.getConnection().createStatement();
             set = statement.executeQuery(query.getQuery());
+
         } catch (SQLException var5) {
             var5.printStackTrace();
             Bukkit.getConsoleSender().sendMessage("[StellarXLib] SqLite get data from query error: " + var5.getErrorCode());
