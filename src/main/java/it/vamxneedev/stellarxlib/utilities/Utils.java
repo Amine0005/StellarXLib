@@ -13,7 +13,9 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 public class Utils {
@@ -24,6 +26,13 @@ public class Utils {
     public String getPluginVersion() { return instance.getDescription().getVersion(); }
 
     public static String colorize(String msg) { return IridiumColorAPI.process(msg); }
+    public static List<String> colorizeList (List<String> listOfMsgs) {
+        List<String> listFormatted = new ArrayList<>();
+        for (String msg : listOfMsgs) {
+            listFormatted.add(colorize(msg));
+        }
+        return listFormatted;
+    }
     public static void sendConsoleMsg(String msg) {
         ConsoleCommandSender console = Bukkit.getConsoleSender();
         console.sendMessage(colorize(msg));
