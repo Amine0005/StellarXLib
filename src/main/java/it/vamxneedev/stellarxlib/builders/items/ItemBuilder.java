@@ -1,5 +1,6 @@
 package it.vamxneedev.stellarxlib.builders.items;
 
+import it.vamxneedev.stellarxlib.utilities.Utils;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -41,17 +42,17 @@ public class ItemBuilder {
     }
 
     public ItemBuilder displayName(String displayName) {
-        this.displayName = displayName;
+        this.displayName = Utils.colorize(displayName);
         return this;
     }
 
     public ItemBuilder lore(List<String> lore) {
-        this.lore = lore;
+        this.lore = Utils.colorizeList(lore);
         return this;
     }
 
     public ItemBuilder addLore(String loreLine) {
-        this.lore.add(loreLine);
+        this.lore.add(Utils.colorize(loreLine));
         return this;
     }
 
@@ -96,20 +97,24 @@ public class ItemBuilder {
         ItemMeta meta = itemStack.getItemMeta();
 
         if (displayName != null) {
+            assert meta != null;
             meta.setDisplayName(displayName);
         }
 
         if (!lore.isEmpty()) {
+            assert meta != null;
             meta.setLore(lore);
         }
 
         if (enchants != null) {
             for (Map.Entry<Enchantment, Integer> entry : enchants.entrySet()) {
+                assert meta != null;
                 meta.addEnchant(entry.getKey(), entry.getValue(), true);
             }
         }
 
         for (ItemFlag flag : flags) {
+            assert meta != null;
             meta.addItemFlags(flag);
         }
 
@@ -119,6 +124,7 @@ public class ItemBuilder {
         }
 
         if (customModelData != null) {
+            assert meta != null;
             meta.setCustomModelData(customModelData);
         }
 

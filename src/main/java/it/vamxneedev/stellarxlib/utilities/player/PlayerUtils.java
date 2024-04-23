@@ -7,6 +7,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
@@ -123,5 +124,28 @@ public class PlayerUtils {
         if (Utils.versionToNumber() > 18)
             return p.getInventory().getItemInMainHand();
         return p.getItemInHand();
+    }
+
+    public static int getFreeSlotsInventory(Player player) {
+        Inventory inventory = player.getInventory();
+        int contents = 0;
+
+        for(ItemStack item : inventory.getContents()){
+            if(item == null){
+                contents++;
+            }
+        }
+        return contents;
+    }
+    public static int getOccupiedSlotsInventory(Player player) {
+        Inventory inventory = player.getInventory();
+        int contents = 0;
+
+        for(ItemStack item : inventory.getContents()){
+            if(item != null){
+                contents++;
+            }
+        }
+        return contents;
     }
 }
