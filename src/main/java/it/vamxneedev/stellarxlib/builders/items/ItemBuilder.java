@@ -19,6 +19,7 @@ public class ItemBuilder {
     private Material material;
     private int amount;
     private String displayName;
+    private byte data;
     private List<String> lore;
     private Map<Enchantment, Integer> enchants;
     private List<ItemFlag> flags;
@@ -27,6 +28,7 @@ public class ItemBuilder {
 
     public ItemBuilder(Material material) {
         this.material = material;
+        this.data = 0;
         this.amount = 1;
         this.displayName = null;
         this.lore = new ArrayList<>();
@@ -43,6 +45,11 @@ public class ItemBuilder {
 
     public ItemBuilder displayName(String displayName) {
         this.displayName = Utils.colorize(displayName);
+        return this;
+    }
+
+    public ItemBuilder setData(byte data) {
+        this.data = data;
         return this;
     }
 
@@ -93,7 +100,11 @@ public class ItemBuilder {
     }
 
     public ItemStack build() {
-        ItemStack itemStack = new ItemStack(material, amount);
+        ItemStack itemStack;
+        if(this.data != 0)
+            itemStack = new ItemStack(material, amount, data);
+        else
+            itemStack = new ItemStack(material, amount);
         ItemMeta meta = itemStack.getItemMeta();
 
         if (displayName != null) {
