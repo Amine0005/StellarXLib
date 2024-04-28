@@ -5,6 +5,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class QueryUtils {
     public static String constructQueryTableCreate(String tableName, List<Pair<String, String>> columns, String primaryKey){
@@ -19,6 +20,10 @@ public class QueryUtils {
             query = query.substring(0, query.length()-2) + ");";
         }
         return query;
+    }
+
+    public static String constructQueryForeignKey(String tableName, String fk, String tableRef, String pk) {
+        return "ALTER TABLE " + tableName + " ADD FOREIGN KEY (`" + fk + "`) REFERENCES `" + tableRef + "` (`" + pk + "`);";
     }
 
     public static String constructQueryRowGet(String table, String indexColumn, Object indexValue) {
@@ -52,6 +57,36 @@ public class QueryUtils {
             query = query + "LIMIT " + limit.toString() + "";
         }
         return query;
+    }
+
+    public static String constructQueryRowsGet(String table, String indexColumn, Object indexValue, Object limit, Map<String, Object> additionalConditions){
+        StringBuilder queryBuilder = new StringBuilder();
+
+        queryBuilder.append("SELECT * FROM `").append(table).append("` WHERE `").append(indexColumn).append("` = ");
+        if (indexValue instanceof Number){
+            queryBuilder.append(indexValue);
+        } else {
+            queryBuilder.append("'").append(indexValue).append("'");
+        }
+
+        if (additionalConditions != null && !additionalConditions.isEmpty()) {
+            for (Map.Entry<String, Object> entry : additionalConditions.entrySet()) {
+                String column = entry.getKey();
+                Object value = entry.getValue();
+                queryBuilder.append(" AND `").append(column).append("` = ");
+                if (value instanceof Number){
+                    queryBuilder.append(value);
+                } else {
+                    queryBuilder.append("'").append(value).append("'");
+                }
+            }
+        }
+
+        if (!(limit.equals(0) || limit.equals("0"))){
+            queryBuilder.append(" LIMIT ").append(limit);
+        }
+
+        return queryBuilder.toString();
     }
 
     public static String constructQueryRowRemove(String table, Pair pair, DatabaseType databaseType){
